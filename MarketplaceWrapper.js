@@ -2,7 +2,7 @@ const { JSDOM } = require('jsdom');
 
 
 /**
- * 
+ * Logs the results of a listing in a CLI-friendly format.
  * @param {Object} marketplaceItems The JSON object containing the listings.
  */
 
@@ -220,7 +220,8 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
                     items[i] = {
                         title: listing["marketplace_listing_title"],
                         location: listing["location"]["reverse_geocode"]["city_page"]["display_name"],
-                        price: listing["listing_price"]["formatted_amount"],
+                        price: Number(listing["listing_price"]["amount"]),
+                        price_formatted: listing["listing_price"]["formatted_amount"],
                         discounted: listing["strikethrough_price"] !== null ? true : false,
                         previousPrice: listing["strikethrough_price"] !== null ? listing["strikethrough_price"]["formatted_amount"] : null, // What was the price before the discount?
                         url: `https://www.facebook.com/marketplace/item/${listing["id"]}/`

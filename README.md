@@ -23,7 +23,6 @@ This is quite basic with lots of information not returned.
 const Marketplace = require('./MarketplaceWrapper.js');
 
 let suggestedLocations = await Marketplace.searchLocations("Chicago");
-// Logs the first suggested location's name.
 console.log(suggestedLocations);
 ```
 Example return:
@@ -47,12 +46,23 @@ Searches for items based on name with support for filters.
 
 **EXAMPLE**
 ```
-let listings = await getListings(queryFilters, locationChoices["Chicago, Illinois"], "iPhone");
+const Marketplace = require('./MarketplaceWrapper.js');
+
+let listings = await Marketplace.getListings(queryFilters, locationChoices["Chicago, Illinois"], "iPhone");
+console.log(listings);
 ```
-Return:
+Example return:
 ```
-{
-  'Samsung galaxy Zflip ': {
+[
+  {
+    title: 'BEST OFFER *IPHONE 12*',
+    location: 'Chicago, Illinois',
+    price: '$0',
+    discounted: false,
+    previousPrice: null,
+    url: 'https://www.facebook.com/marketplace/item/419639300911310/'
+  },
+  {
     title: 'Samsung galaxy Zflip ',
     location: 'Chicago, Illinois',
     price: '$0',
@@ -60,16 +70,8 @@ Return:
     previousPrice: null,
     url: 'https://www.facebook.com/marketplace/item/392128523205558/'
   },
-  'iphone 8': {
-    title: 'iphone 8',
-    location: 'Chicago, Illinois',
-    price: '$70',
-    discounted: false,
-    previousPrice: null,
-    url: 'https://www.facebook.com/marketplace/item/1649323602484591/'
-  },
   ...
-}
+]
 ```
 
 
@@ -80,7 +82,7 @@ Creates the query variable section for the URL. Used for getListings().
 ```
 const Marketplace = require('./MarketplaceWrapper.js');
 
-let queryFilters = createSearchQuery(100, 250, "all", ["new"], "all", "available", "normal");
+let queryFilters = Marketplace.createSearchQuery(100, 250, "all", ["new"], "all", "available", "normal");
 // Logs the prepared query string.
 console.log(queryFilters);
 ```
