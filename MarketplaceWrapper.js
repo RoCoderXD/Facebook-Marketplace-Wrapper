@@ -1,6 +1,10 @@
 const { JSDOM } = require('jsdom');
 
 
+/**
+ * 
+ * @param {Object} marketplaceItems The JSON object containing the listings.
+ */
 
 
 function logCLIOutputFormat(marketplaceItems) {
@@ -28,10 +32,6 @@ function logCLIOutputFormat(marketplaceItems) {
 
 
 
-
-
-
-
 module.exports = {
 version: "0.0.1",
 
@@ -42,7 +42,7 @@ version: "0.0.1",
  * @param {string} text The name of a location to look for.
  * 
  * @example
- * let locationChoices = searchLocations("Chicago")
+ * let locationChoices = Marketplace.searchLocations("Chicago");
  */
 searchLocations: async function(text) {
     let locationIdSearch = await fetch("https://www.facebook.com/api/graphql/", {
@@ -94,7 +94,7 @@ searchLocations: async function(text) {
  * @param {string} priceType The price type of the listings. Choose from "discounted" and "normal". Use "normal" for default Marketplace search.
  * 
  * @example
- * let queryFilters = createSearchQuery(-1, -1, "all", [], "all", "available", "normal")
+ * let queryFilters = Marketplace.createSearchQuery(100, 250, "all", ["new"], "all", "available", "normal");
  */
 createQueryFilters: function(minPrice, maxPrice, deliveryMethod, itemCondition, daysSinceListed, availability, priceType) {
     let searchQuery = "";
@@ -128,17 +128,18 @@ createQueryFilters: function(minPrice, maxPrice, deliveryMethod, itemCondition, 
 
 
 /**
- * // Returns listings in the specified location
+ * Returns listings in the specified location
  * @param {string} queryFilters The query created by createSearchQuery. If you aren't using any filters, use an empty string.
  * @param {string} locationId The Marketplace location id. Can be gotten from searchLocations().
  * @param {string} itemName The text to search on Marketplace for.
  * @param {boolean} logCLIOutputFormat Default: false. Whether to log the results in a log-friendly format additionally.
- * 
+ * @returns {Object} An object containing the listings and their properties.
  * @example
- * let queryFilters = createSearchQuery(-1, -1, "all", [], "all", "available", "normal")
- * let locationChoices = searchLocations("Chicago")
+ * // Default search parameters.
+ * let queryFilters = Marketplace.createSearchQuery(-1, -1, "all", [], "all", "available", "normal");
+ * let locationChoices = Marketplace.searchLocations("Chicago");
  * 
- * let listings = getListings(query, locationChoices["Chicago, Michigan"], "certain item")
+ * let listings = await Marketplace.getListings(queryFilters, locationChoices["Chicago, Michigan"], "iPhone");
  */
 getListings: async function(queryFilters, locationId, itemName, cliOutputFormat = false) {
     let url = "";
@@ -153,7 +154,7 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
         //console.log(url);
     }
 
-    var marketFetch = await fetch(url, {
+    let marketFetch = await fetch(url, {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
           "accept-language": "en-US,en;q=0.6",
@@ -171,7 +172,9 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
         "method": "GET"
       });
 
-    var marketResponseText = await marketFetch.text(); // get the response as text
+    let marketResponseText = await marketFetch.text(); // get the response as text
+    let items = []; // Create the object early for the listings to be stored.
+
     try {
         const dom = new JSDOM(marketResponseText);
             
@@ -198,7 +201,6 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
         });
             
         // Parse and optionally log each listing.
-        let items = {};
         jsonStrings.forEach(jsonString => {
             try {
                 let wrappedJsonString = `{${jsonString}}`;
@@ -213,9 +215,9 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
                     
                 // Create the object for the listings. Gotta add more stuff to this.
 
-                for (let i=1; i<marketplaceItems.length; i++) {
+                for (let i=0; i<marketplaceItems.length; i++) {
                     let listing = marketplaceItems[i]["node"]["listing"];
-                    items[`${listing["marketplace_listing_title"]}`] = {
+                    items[i] = {
                         title: listing["marketplace_listing_title"],
                         location: listing["location"]["reverse_geocode"]["city_page"]["display_name"],
                         price: listing["listing_price"]["formatted_amount"],

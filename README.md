@@ -26,8 +26,8 @@ let suggestedLocations = await Marketplace.searchLocations("Chicago");
 // Logs the first suggested location's name.
 console.log(suggestedLocations);
 ```
-```
 Example return:
+```
 {
   'Chicago Lawn': '109445852407186',
   'Chicago, Illinois': '108659242498155',
@@ -40,4 +40,51 @@ Example return:
   'East Chicago, Indiana': '107726489256895',
   'South Lawndale, Chicago': '108000342556515'
 }
+```
+
+### *getListings(queryFilters: string, locationId: string, itemName: string, cliOutputFormat?: boolean)*
+Searches for items based on name with support for filters.
+
+**EXAMPLE**
+```
+let listings = await getListings(queryFilters, locationChoices["Chicago, Illinois"], "iPhone");
+```
+Return:
+```
+{
+  'Samsung galaxy Zflip ': {
+    title: 'Samsung galaxy Zflip ',
+    location: 'Chicago, Illinois',
+    price: '$0',
+    discounted: false,
+    previousPrice: null,
+    url: 'https://www.facebook.com/marketplace/item/392128523205558/'
+  },
+  'iphone 8': {
+    title: 'iphone 8',
+    location: 'Chicago, Illinois',
+    price: '$70',
+    discounted: false,
+    previousPrice: null,
+    url: 'https://www.facebook.com/marketplace/item/1649323602484591/'
+  },
+  ...
+}
+```
+
+
+### *createQueryFilters*
+Creates the query variable section for the URL. Used for getListings().
+
+**EXAMPLE**
+```
+const Marketplace = require('./MarketplaceWrapper.js');
+
+let queryFilters = createSearchQuery(100, 250, "all", ["new"], "all", "available", "normal");
+// Logs the prepared query string.
+console.log(queryFilters);
+```
+Return:
+```
+"minPrice=100&maxPrice=250&itemCondition=new&"
 ```
