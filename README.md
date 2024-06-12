@@ -57,7 +57,8 @@ Example return:
   {
     title: 'BEST OFFER *IPHONE 12*',
     location: 'Chicago, Illinois',
-    price: '$0',
+    price: 0,
+    price_formatted: '$0',
     discounted: false,
     previousPrice: null,
     url: 'https://www.facebook.com/marketplace/item/419639300911310/'
@@ -65,7 +66,8 @@ Example return:
   {
     title: 'Samsung galaxy Zflip ',
     location: 'Chicago, Illinois',
-    price: '$0',
+    price: 0,
+    price_formatted: '$0',
     discounted: false,
     previousPrice: null,
     url: 'https://www.facebook.com/marketplace/item/392128523205558/'
