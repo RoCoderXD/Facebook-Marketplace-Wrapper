@@ -67,7 +67,7 @@ searchLocations: async function(text) {
     let locationArray = {};
 
     let importantJSONSection = locationIdSearchArray["data"]["city_street_search"]["street_results"]["edges"];
-    for (let i=0; i<importantJSONSection.length; i++) {
+    for (let i=0; i<importantJSONSection.length; i++) { // Loop through the JSON to get the important information.
         let location = importantJSONSection[i];
         locationArray[`${location["node"]["single_line_address"]}`] = location["node"]["page"]["id"]
     }
@@ -188,7 +188,7 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
             
                 //console.log(`Found "marketplace_search" at index ${startIndex}, end index ${endIndex}`); // Debugging: Log the indices
             
-                if (endIndex !== -1) { // if the endIndex is fucked up, do the cool stuff
+                if (endIndex !== -1) { // if the endIndex isn't f**ked up, do the cool stuff
                     let jsonString = content.substring(startIndex, endIndex - 2); // Takes piece of the determined JSON and -2 to remove the last comma and closing bracket that's before "extensions":.
                     jsonStrings.push(jsonString);
                 } else {
@@ -197,7 +197,7 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
             }
         });
             
-        // Parse and optionally log each JSON string
+        // Parse and optionally log each listing.
         let items = {};
         jsonStrings.forEach(jsonString => {
             try {
@@ -211,7 +211,7 @@ getListings: async function(queryFilters, locationId, itemName, cliOutputFormat 
 
 
                     
-                // Create the object for the listings
+                // Create the object for the listings. Gotta add more stuff to this.
 
                 for (let i=1; i<marketplaceItems.length; i++) {
                     let listing = marketplaceItems[i]["node"]["listing"];
