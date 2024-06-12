@@ -58,11 +58,10 @@ searchLocations: async function(text) {
             "x-fb-friendly-name": "MarketplaceSearchAddressDataSourceQuery",
             "Referrer-Policy": "strict-origin-when-cross-origin"
         },
-        "body": `query%22%3A%22${encodeURIComponent(text)}%22%2C%22search_type%22%3A%22PLACE_TYPEAHEAD%22%2C%22`,
+        "body": `variables=%7B%22params%22%3A%7B%22caller%22%3A%22MARKETPLACE%22%2C%22country_filter%22%3Anull%2C%22integration_strategy%22%3A%22STRING_MATCH%22%2C%22page_category%22%3A%5B%22CITY%22%2C%22SUBCITY%22%2C%22NEIGHBORHOOD%22%2C%22POSTAL_CODE%22%5D%2C%22query%22%3A%22${encodeURIComponent(text)}%22%2C%22search_type%22%3A%22PLACE_TYPEAHEAD%22%2C%22viewer_coordinates%22%3Anull%7D%7D&server_timestamps=true&doc_id=7321914954515895`,
         "method": "POST"
     });
     let locationIdSearchResponse = await locationIdSearch.text();
-
     let locationIdSearchArray = JSON.parse(locationIdSearchResponse);
 
     let locationArray = {};
